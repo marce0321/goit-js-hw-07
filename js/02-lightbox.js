@@ -1,27 +1,35 @@
 import { galleryItems } from './gallery-items.js';
 // Change code below this line
 
-console.log(galleryItems);
+const galleryContainer = document.querySelector('ul.gallery');
+const photosMarkup = createGalleryItem(galleryItems);
 
-const containerGallery = document.querySelector(".galery");
+function createGalleryItem(element)
+{
+    return element
+    .map(({preview,original,description})=>{
+        return `
+        <li class ='gallery_item'> 
+        <a class="gallery__link" href="${original}">
+            <img class ="gallery__image"
+            src = "${preview}"
+            data-source="${original}"
+            alt="${description}"
+            />
+        </a>
+        </li>`
+    })
+    .join('');
+};
 
-const galleryMarkup = galleryItems
-.map((element)=>
-`<li class="galery__item">
-<a class="gallery__link" href="${element.original}">
-<img 
-    class="gallery__image" 
-    src= "${element.preview}"
-    alt="${element.description}"
-/>
-</a>
-</li>`
-)
-.join("");
+galleryContainer.insertAdjacentHTML("beforeend", photosMarkup);
 
-containerGallery.insertAdjacentHTML("aterbeing", galleyMarkup);
-containerGallery.addEventListener('click',(event)=> event.preventDefault())
-let lightbox = new SimpleLightbox('.gallery a',{
-captionsData: 'alt',
-captionsDealy: 250,
-})
+//Aqui usamos simplelightbox
+
+var lightbox = new SimpleLightbox(".gallery a", {
+    captionDelay: 250,
+    captions: true,
+    captionsData: "alt",
+    captionPosition: "bottom",
+});
+lightbox.on('show.simplelightbox')
